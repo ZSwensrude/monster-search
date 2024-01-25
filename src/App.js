@@ -3,6 +3,7 @@ import './App.css';
 import { CardList } from './components/MonsterList/list.component';
 import { useState, useEffect } from 'react';
 import { SearchBar } from './components/SearchBar/searchBar.component';
+import axios from 'axios';
 
 function App() {
   const [monsters, setMonsters] = useState([]);
@@ -10,12 +11,17 @@ function App() {
   const [filteredMonsters, setFilteredMonsters] = useState([]);
 
   useEffect( () => {
-    const fetchMonsters = async () => {
-      const response = await fetch("https://jsonplaceholder.typicode.com/users");
-      const monsters = await response.json();
-      setMonsters(monsters);
-    }
-    fetchMonsters();
+    const url = 'https://jsonplaceholder.typicode.com/users'
+    const data = {};
+    axios.get(url, data, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json;charset=UTF-8",
+      },
+    }).then(({data}) => { 
+      console.log(data);
+      setMonsters(data);
+    });
   }, []);
 
   useEffect(() => {
@@ -30,10 +36,11 @@ function App() {
     setFilteredMonsters(filtered);
   }, [monsters, searchInput]);
     
-
   const handleInput = e => {
     setSearchInput(e.target.value);
   };
+
+  
 
 
   return (
